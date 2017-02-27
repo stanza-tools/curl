@@ -1,0 +1,32 @@
+defpackage curl :
+   import core
+   import curl/option
+
+extern curl_easy_init: () -> ptr<?>
+; CURL *curl_easy_init( );
+
+lostanza deftype Handle :
+   value: ptr<?>
+
+public lostanza defn Handle () -> ref<Handle> :
+   val p:ptr<?> = call-c curl_easy_init()
+   return new Handle{p}
+
+extern curl_global_init: long -> int
+; CURLcode curl_global_init(long flags );
+
+public lostanza defn cURL () -> ref<Int> :
+   val status:int = call-c curl_global_init(curl/option/global["ALL"])
+   return new Int{status}
+
+extern curl_easy_cleanup: ptr<?> -> int
+; void curl_easy_cleanup(CURL * handle );
+
+extern curl_easy_setopt: (ptr<?>, int, ?) -> int
+; CURLcode curl_easy_setopt(CURL *handle, CURLoption option, parameter);
+
+extern curl_easy_perform: ptr<?> -> int
+; CURLcode curl_easy_perform(CURL * easy_handle );
+
+extern curl_easy_getinfo: (ptr<?>, int, ptr<?>) -> int
+; CURLcode curl_easy_getinfo(CURL *curl, CURLINFO info, ... );
