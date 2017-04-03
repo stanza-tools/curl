@@ -2,4 +2,4 @@ defpackage basic-curl :
    import core
    import curl
 
-val handle = curl()
+val handle = cURL()

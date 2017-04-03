@@ -1,3 +1,6 @@
 stz-temp-bin
 *.s
 *~
+pkgs/*
+.stanza
+testbin
