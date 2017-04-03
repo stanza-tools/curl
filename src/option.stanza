@@ -1,47 +1,44 @@
-defpackage curl/option :
+defpackage curl/opt :
    import core
-   import collections
-
-protected val handle = HashTable<String,Int>()
 
 ; This is the FILE * or void * the regular output should be written to.
-handle["WRITEDATA"] = 1001
+protected val WRITEDATA = 1001
 
 ; The full URL to get/put
-handle["URL"] = 1002
+protected val URL = 1002
 
 ; Port number to connect to, if other than default.
-handle["PORT"] = 3
+protected val PORT = 3
 
 ; Name of proxy to use.
-handle["PROXY"] = 1004
+protected val PROXY = 1004
 
 ; "user:password;options" to use when fetching.
-handle["USERPWD"] = 1005
+protected val USERPWD = 1005
 
 ; "user:password" to use with proxy.
-handle["PROXYUSERPWD"] = 1006
+protected val PROXYUSERPWD = 1006
 
 ; Range to get, specified as an ASCII string.
-handle["RANGE"] = 1007
+protected val RANGE = 1007
 
 ; Specified file stream to upload from (use as input):
-handle["READDATA"] = 1009
+protected val READDATA = 1009
 
 ; Buffer to receive error messages in, must be at least CURL_ERROR_SIZE
 ; bytes big. If this is not used, error messages go to stderr instead:
-handle["ERRORBUFFER"] = 1010
+protected val ERRORBUFFER = 1010
 
 ; Function that will be called to store the output (instead of fwrite). The
 ; parameters will use fwrite() syntax, make sure to follow them.
-handle["WRITEFUNCTION"] = 2011
+protected val WRITEFUNCTION = 2011
 
 ; Function that will be called to read the input (instead of fread). The
 ; parameters will use fread() syntax, make sure to follow them.
-handle["READFUNCTION"] = 2012
+protected val READFUNCTION = 2012
 
 ; Time-out the read operation after this amount of seconds
-handle["TIMEOUT"] = 13
+protected val TIMEOUT = 13
 
 ; If the CURLOPT_INFILE is used, this can be used to inform libcurl about
 ; how large the file being sent really is. That allows better error
@@ -51,20 +48,20 @@ handle["TIMEOUT"] = 13
 ; For large file support, there is also a _LARGE version of the key
 ; which takes an off_t type, allowing platforms with larger off_t
 ; sizes to handle larger files.  See below for INFILESIZE_LARGE.
-handle["INFILSIZE"] = 14
+protected val INFILSIZE = 14
 
 ; POST static input fields.
-handle["POSTFIELDS"] = 1015
+protected val POSTFIELDS = 1015
 
 ; Set the referrer page (needed by some CGIs)
-handle["REFERER"] = 1016
+protected val REFERER = 1016
 
 ; Set the FTP PORT string (interface name, named or numerical IP address)
 ; Use i.e '-' to use default address.
-handle["FTPPORT"] = 1017
+protected val FTPPORT = 1017
 
 ; Set the User-Agent string (examined by some CGIs)
-handle["USERAGENT"] = 1018
+protected val USERAGENT = 1018
 
 ; If the download receives less than "low speed limit" bytes/second
 ; during "low speed time" seconds, the operations is aborted.
@@ -72,25 +69,26 @@ handle["USERAGENT"] = 1018
 ; it is less than 2000 bytes/sec during 20 seconds.
 
 ; Set the "low speed limit"
-handle["LOW_SPEED_LIMIT"] = 19
+protected val LOW_SPEED_LIMIT = 19
 
 ; Set the "low speed time"
-handle["LOW_SPEED_TIME"] = 20
+protected val LOW_SPEED_TIME = 20
 
 ; Set the continuation offset.
 ;
 ; Note there is also a _LARGE version of this key which uses
 ; off_t types, allowing for large file offsets on platforms which
 ; use larger-than-32-bit off_t's.  Look below for RESUME_FROM_LARGE.
-handle["RESUME_FROM"] = 21
+protected val RESUME_FROM = 21
 
 ; Set cookie in request:
-handle["COOKIE"] = 1022
+protected val COOKIE = 1022
 
-protected val global = HashTable<String,Int>()
-global["SSL"]       = 1 << 0
-global["WIN32"]     = 1 << 1
-global["ALL"]       = global["SSL"]|global["WIN32"]
-global["NOTHING"]   = 0
-global["DEFAULT"]   = global["ALL"]
-global["ACK_EINTR"] = 1 << 2
+; GLOBAL OPTIONS
+
+protected lostanza val SSL:long = 1 << 0
+protected lostanza val WIN32:long = 1 << 1
+protected lostanza val ALL:long = SSL|WIN32
+protected lostanza val NOTHING:long = 0
+protected lostanza val DEFAULT:long = ALL
+protected lostanza val ACK_EINTR:long = 1 << 2

@@ -105,5 +105,3 @@ public val status:Tuple<String> = [
    "CURLE_SSL_INVALIDCERTSTATUS"
    "CURLE_HTTP2_STREAM"
 ]
-
-println(status[92])
