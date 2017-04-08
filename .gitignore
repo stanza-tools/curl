@@ -3,3 +3,6 @@ bin/
 *~
 pkgs/
 .stanza
+# Script symlinks
+compile
+test
