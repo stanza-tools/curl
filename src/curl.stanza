@@ -12,29 +12,66 @@ public lostanza defn Handle () -> ref<Handle> :
    val p:ptr<?> = call-c curl_easy_init()
    return new Handle{p}
 
+
 extern curl_global_init: long -> int
 ; CURLcode curl_global_init(long flags );
 
-public lostanza defn cURL () -> ref<Int> :
+public lostanza defn cURL () -> ref<False> :
    val status:int = call-c curl_global_init(curl/opt/ALL)
-   return new Int{status}
+   ; TODO: Add error handling
+   return false
+
 
 extern curl_easy_cleanup: ptr<?> -> int
 ; void curl_easy_cleanup(CURL * handle );
 
+public lostanza defn cleanup (h:ref<Handle>) -> ref<False> :
+   val status:int = call-c curl_easy_cleanup(h.value)
+   ; TODO: Add error handling
+   return false
+
+
 extern curl_global_cleanup: () -> int
 ; void curl_global_cleanup(void);
 
-public lostanza defn cleanup () -> ref<Int> :
+public lostanza defn cleanup () -> ref<False> :
     call-c curl_global_cleanup()
-    return new Int{0}
+    return false
 
-extern curl_easy_setopt: (ptr<?>, int, ?) -> int
+
+extern curl_easy_setopt: (ptr<?>, int, ptr<?>) -> int
+; extern curl_easy_setopt: (ptr<?>, int, ptr<byte>) -> int
+extern curl_easy_setopt: (ptr<?>, int, long) -> int
 ; CURLcode curl_easy_setopt(CURL *handle, CURLoption option, parameter);
+
+public lostanza defn set (h:ref<Handle>, o:ref<Int>, p:ref<String>) -> ref<False> :
+   val c:int = call-c curl_easy_setopt(h.value, o.value, addr!(p.chars))
+   ; TODO: Add error handling
+   return false
+
+public lostanza defn set (h:ref<Handle>, o:ref<Int>, p:ref<Long>) -> ref<False> :
+   val c:int = call-c curl_easy_setopt(h.value, o.value, p.value)
+   ; TODO: Add error handling
+   return false
+
+public lostanza defn set (h:ref<Handle>, o:ref<Int>, p:ref<True|False>) -> ref<False> :
+   var bool:long
+   match(p) :
+      (t:ref<True>)  : bool = 0L
+      (f:ref<False>) : bool = 1L
+   val c:int = call-c curl_easy_setopt(h.value, o.value, bool)
+   ; TODO: Add error handling
+   return false
+
 
 extern curl_easy_perform: ptr<?> -> int
 ; CURLcode curl_easy_perform(CURL * easy_handle );
 
+public lostanza defn perform (h:ref<Handle>) -> ref<False> :
+   val c:int = call-c curl_easy_perform(h.value)
+   ; TODO: Add error handling
+   return false
+
+
 extern curl_easy_getinfo: (ptr<?>, int, ptr<?>) -> int
 ; CURLcode curl_easy_getinfo(CURL *curl, CURLINFO info, ... );
-

@@ -1,0 +1,16 @@
+; Very simple HTTP GET
+defpackage simple-curl :
+   import core
+   import curl
+
+val handle = Handle()
+
+handle[curl/opt/url] = "http://example.com"
+; example.com is redirected, so we tell libcurl to follow redirection
+handle[curl/opt/followlocation] = true
+
+; Perform the request, errors thrown with Stanza primitives
+perform(handle)
+
+; always cleanup
+cleanup(handle)

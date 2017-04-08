@@ -2,43 +2,43 @@ defpackage curl/opt :
    import core
 
 ; This is the FILE * or void * the regular output should be written to.
-protected val WRITEDATA = 1001
+protected val writedata:Int = 10001
 
 ; The full URL to get/put
-protected val URL = 1002
+protected val url:Int = 10002
 
 ; Port number to connect to, if other than default.
-protected val PORT = 3
+protected val port:Int = 3
 
 ; Name of proxy to use.
-protected val PROXY = 1004
+protected val proxy:Int = 10004
 
 ; "user:password;options" to use when fetching.
-protected val USERPWD = 1005
+protected val userpwd:Int = 10005
 
 ; "user:password" to use with proxy.
-protected val PROXYUSERPWD = 1006
+protected val proxyuserpwd:Int = 10006
 
 ; Range to get, specified as an ASCII string.
-protected val RANGE = 1007
+protected val range:Int = 10007
 
 ; Specified file stream to upload from (use as input):
-protected val READDATA = 1009
+protected val readdata:Int = 10009
 
 ; Buffer to receive error messages in, must be at least CURL_ERROR_SIZE
 ; bytes big. If this is not used, error messages go to stderr instead:
-protected val ERRORBUFFER = 1010
+protected val errorbuffer:Int = 10010
 
 ; Function that will be called to store the output (instead of fwrite). The
 ; parameters will use fwrite() syntax, make sure to follow them.
-protected val WRITEFUNCTION = 2011
+protected val writefunction:Int = 20011
 
 ; Function that will be called to read the input (instead of fread). The
 ; parameters will use fread() syntax, make sure to follow them.
-protected val READFUNCTION = 2012
+protected val readfunction:Int = 20012
 
 ; Time-out the read operation after this amount of seconds
-protected val TIMEOUT = 13
+protected val timeout:Int = 13
 
 ; If the CURLOPT_INFILE is used, this can be used to inform libcurl about
 ; how large the file being sent really is. That allows better error
@@ -48,20 +48,20 @@ protected val TIMEOUT = 13
 ; For large file support, there is also a _LARGE version of the key
 ; which takes an off_t type, allowing platforms with larger off_t
 ; sizes to handle larger files.  See below for INFILESIZE_LARGE.
-protected val INFILSIZE = 14
+protected val infilsize:Int = 14
 
 ; POST static input fields.
-protected val POSTFIELDS = 1015
+protected val postfields:Int = 10015
 
 ; Set the referrer page (needed by some CGIs)
-protected val REFERER = 1016
+protected val referer:Int = 10016
 
 ; Set the FTP PORT string (interface name, named or numerical IP address)
 ; Use i.e '-' to use default address.
-protected val FTPPORT = 1017
+protected val ftpport:Int = 10017
 
 ; Set the User-Agent string (examined by some CGIs)
-protected val USERAGENT = 1018
+protected val useragent:Int = 10018
 
 ; If the download receives less than "low speed limit" bytes/second
 ; during "low speed time" seconds, the operations is aborted.
@@ -69,20 +69,22 @@ protected val USERAGENT = 1018
 ; it is less than 2000 bytes/sec during 20 seconds.
 
 ; Set the "low speed limit"
-protected val LOW_SPEED_LIMIT = 19
+protected val low-speed-limit:Int = 19
 
 ; Set the "low speed time"
-protected val LOW_SPEED_TIME = 20
+protected val low-speed-time:Int = 20
 
 ; Set the continuation offset.
 ;
 ; Note there is also a _LARGE version of this key which uses
 ; off_t types, allowing for large file offsets on platforms which
 ; use larger-than-32-bit off_t's.  Look below for RESUME_FROM_LARGE.
-protected val RESUME_FROM = 21
+protected val resume_from:Int = 21
 
 ; Set cookie in request:
-protected val COOKIE = 1022
+protected val cookie:Int = 10022
+
+protected val followlocation:Int = 52
 
 ; GLOBAL OPTIONS
 
