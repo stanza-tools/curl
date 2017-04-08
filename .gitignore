@@ -1,8 +1,15 @@
-bin/
 *.s
 *~
+
+# Stanza binaries
+bin/
+
+# Stanza packages
 pkgs/
+
+# Stanza configuration
 .stanza
+
 # Script symlinks
 compile
 test
