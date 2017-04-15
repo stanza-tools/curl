@@ -2,45 +2,49 @@ defpackage curl :
    import core
    import curl/opt
 
+lostanza defn to-uint (i:ref<Int>) -> int :
+   val uint-max:int = 2147483647
+   return uint-max + 1 + i.value
+
 extern curl_easy_init: () -> ptr<?>
 ; CURL *curl_easy_init( );
+
+extern stz_curl_write_callback: (ptr<byte>, int, int, ptr<?>) -> int
 
 lostanza deftype Handle :
    value: ptr<?>
 
 public lostanza defn Handle () -> ref<Handle> :
    val p:ptr<?> = call-c curl_easy_init()
-   return new Handle{p}
+   val h:ref<Handle> = new Handle{p}
+   ;; TODO: Set options here
+   set(h, curl/opt/writefunction, stz_curl_write_callback as (ptr<byte>, int, int, ptr<?>) -> int)
+   return h
 
-
-extern curl_global_init: long -> int
 ; CURLcode curl_global_init(long flags );
-
+extern curl_global_init: long -> int
 public lostanza defn cURL () -> ref<False> :
    val status:int = call-c curl_global_init(curl/opt/ALL)
    ; TODO: Add error handling
    return false
 
-
-extern curl_easy_cleanup: ptr<?> -> int
 ; void curl_easy_cleanup(CURL * handle );
-
+extern curl_easy_cleanup: ptr<?> -> int
 public lostanza defn cleanup (h:ref<Handle>) -> ref<False> :
    val status:int = call-c curl_easy_cleanup(h.value)
-   ; TODO: Add error handling
+   ; HACK: Add error handling
    return false
 
 
-extern curl_global_cleanup: () -> int
 ; void curl_global_cleanup(void);
-
+extern curl_global_cleanup: () -> int
 public lostanza defn cleanup () -> ref<False> :
     call-c curl_global_cleanup()
     return false
 
 
-extern curl_easy_setopt: (ptr<?>, int, ptr<?>) -> int
-; extern curl_easy_setopt: (ptr<?>, int, ptr<byte>) -> int
+extern curl_easy_setopt: (ptr<?>, int, ptr<byte>) -> int
+extern curl_easy_setopt: (ptr<?>, int, ptr<((ptr<byte>, int, int, ptr<?>) -> int)>) -> int
 extern curl_easy_setopt: (ptr<?>, int, long) -> int
 ; CURLcode curl_easy_setopt(CURL *handle, CURLoption option, parameter);
 
@@ -63,14 +67,22 @@ public lostanza defn set (h:ref<Handle>, o:ref<Int>, p:ref<True|False>) -> ref<F
    ; TODO: Add error handling
    return false
 
-
-extern curl_easy_perform: ptr<?> -> int
-; CURLcode curl_easy_perform(CURL * easy_handle );
-
-public lostanza defn perform (h:ref<Handle>) -> ref<False> :
-   val c:int = call-c curl_easy_perform(h.value)
+public lostanza defn set (h:ref<Handle>, o:ref<Int>, p:(ptr<byte>, int, int, ptr<?>) -> int) -> ref<False> :
+   val c:int = call-c curl_easy_setopt(h.value, o.value, addr(p))
    ; TODO: Add error handling
    return false
+
+extern get_stz_curl_write_buffer: () -> ptr<byte>
+lostanza defn get-write-buffer () -> ref<String> :
+   return String(call-c get_stz_curl_write_buffer())
+
+; CURLcode curl_easy_perform(CURL * easy_handle );
+extern curl_easy_perform: ptr<?> -> int
+
+public lostanza defn perform (h:ref<Handle>) -> ref<String> :
+   val c:int = call-c curl_easy_perform(h.value)
+   ; TODO: Add error handling
+   return get-write-buffer()
 
 
 extern curl_easy_getinfo: (ptr<?>, int, ptr<?>) -> int

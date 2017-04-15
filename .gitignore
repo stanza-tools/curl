@@ -1,5 +1,6 @@
 *.s
 *~
+tags
 
 # Stanza binaries
 bin/
