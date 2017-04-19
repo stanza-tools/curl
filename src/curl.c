@@ -18,19 +18,19 @@ struct MemoryStruct {
 
 struct MemoryStruct *mem;
 char *stz_curl_write_mem() {return mem->memory;}
+void  stz_curl_write_mem_free() {free(mem->memory);}
 
 static size_t
-WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp)
+stz_curl_write_mem_cb(void *contents, size_t size, size_t nmemb, void *userp)
 {
-    printf("Writing to memory...");
     size_t realsize = size * nmemb;
     struct MemoryStruct *mem = (struct MemoryStruct *)userp;
 
     mem->memory = realloc(mem->memory, mem->size + realsize + 1);
     if(mem->memory == NULL) {
-    /* out of memory! */
-    printf("not enough memory (realloc returned NULL)\n");
-    return 0;
+        /* out of memory! */
+        printf("not enough memory (realloc returned NULL)\n");
+        return 0;
     }
 
     memcpy(&(mem->memory[mem->size]), contents, realsize);
@@ -41,7 +41,12 @@ WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp)
 }
 
 void
-stz_curl_set_callback(CURL *handle)
+stz_curl_write_mem_cb_set(CURL *handle)
 {
-    curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
+    struct MemoryStruct chunk;
+    chunk.memory = malloc(1);
+    chunk.size = 0;
+
+    curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, stz_curl_write_mem_cb);
+    curl_easy_setopt(handle, CURLOPT_WRITEDATA, (void *)&chunk);
 }

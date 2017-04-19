@@ -11,11 +11,13 @@ handle[curl/opt/url] = "http://example.com"
 ; example.com is redirected, so we tell libcurl to follow redirection
 handle[curl/opt/followlocation] = true
 
+println("Performing request...")
+
 ; Perform the request, errors thrown with Stanza primitives
 val s:String = perform(handle)
 
-println("The string is:")
-print(s)
+print("The string is: ")
+println(s)
 
 ; always cleanup
 cleanup(handle)
