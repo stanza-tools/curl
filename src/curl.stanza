@@ -15,11 +15,13 @@ lostanza deftype Handle :
 extern stz_curl_set_callback: ptr<?> -> int
 
 public lostanza defn Handle () -> ref<Handle> :
-   val p:ptr<?> = call-c curl_easy_init()
-   val h:ref<Handle> = new Handle{p}
-   ;; TODO: Set options here
-   call-c stz_curl_set_callback(h.value)
-   return h
+    println(String("Creating handle..."))
+    val p:ptr<?> = call-c curl_easy_init()
+    val h:ref<Handle> = new Handle{p}
+    ;; TODO: Set options here
+    println(String("Setting callback..."))
+    call-c stz_curl_set_callback(h.value)
+    return h
 
 ; CURLcode curl_global_init(long flags );
 extern curl_global_init: long -> int
@@ -66,9 +68,9 @@ public lostanza defn set (h:ref<Handle>, o:ref<Int>, p:ref<True|False>) -> ref<F
    ; TODO: Add error handling
    return false
 
-extern get_stz_curl_write_buffer: () -> ptr<byte>
-lostanza defn get-write-buffer () -> ref<String> :
-   return String(call-c get_stz_curl_write_buffer())
+extern stz_curl_write_mem: () -> ptr<byte>
+lostanza defn get-write-mem () -> ref<String> :
+   return String(call-c stz_curl_write_mem())
 
 ; CURLcode curl_easy_perform(CURL * easy_handle );
 extern curl_easy_perform: ptr<?> -> int
@@ -76,7 +78,7 @@ extern curl_easy_perform: ptr<?> -> int
 public lostanza defn perform (h:ref<Handle>) -> ref<String> :
    val c:int = call-c curl_easy_perform(h.value)
    ; TODO: Add error handling
-   return get-write-buffer()
+   return get-write-mem()
 
 
 extern curl_easy_getinfo: (ptr<?>, int, ptr<?>) -> int

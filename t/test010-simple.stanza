@@ -3,6 +3,8 @@ defpackage simple-curl :
    import core
    import curl
 
+println("Initializing handle...")
+
 val handle = Handle()
 
 handle[curl/opt/url] = "http://example.com"
