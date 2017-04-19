@@ -1,2 +1,2 @@
 #!/bin/bash
-stanza compile src/* -pkg pkgs
+stanza compile src/*.stanza -ccfiles src/curl.c -pkg pkgs

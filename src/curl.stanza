@@ -9,16 +9,16 @@ lostanza defn to-uint (i:ref<Int>) -> int :
 extern curl_easy_init: () -> ptr<?>
 ; CURL *curl_easy_init( );
 
-extern stz_curl_write_callback: (ptr<byte>, int, int, ptr<?>) -> int
-
 lostanza deftype Handle :
    value: ptr<?>
+
+extern stz_curl_set_callback: ptr<?> -> int
 
 public lostanza defn Handle () -> ref<Handle> :
    val p:ptr<?> = call-c curl_easy_init()
    val h:ref<Handle> = new Handle{p}
    ;; TODO: Set options here
-   set(h, curl/opt/writefunction, stz_curl_write_callback as (ptr<byte>, int, int, ptr<?>) -> int)
+   call-c stz_curl_set_callback(h.value)
    return h
 
 ; CURLcode curl_global_init(long flags );
@@ -44,7 +44,6 @@ public lostanza defn cleanup () -> ref<False> :
 
 
 extern curl_easy_setopt: (ptr<?>, int, ptr<byte>) -> int
-extern curl_easy_setopt: (ptr<?>, int, ptr<((ptr<byte>, int, int, ptr<?>) -> int)>) -> int
 extern curl_easy_setopt: (ptr<?>, int, long) -> int
 ; CURLcode curl_easy_setopt(CURL *handle, CURLoption option, parameter);
 
@@ -64,11 +63,6 @@ public lostanza defn set (h:ref<Handle>, o:ref<Int>, p:ref<True|False>) -> ref<F
       (t:ref<True>)  : bool = 0L
       (f:ref<False>) : bool = 1L
    val c:int = call-c curl_easy_setopt(h.value, o.value, bool)
-   ; TODO: Add error handling
-   return false
-
-public lostanza defn set (h:ref<Handle>, o:ref<Int>, p:(ptr<byte>, int, int, ptr<?>) -> int) -> ref<False> :
-   val c:int = call-c curl_easy_setopt(h.value, o.value, addr(p))
    ; TODO: Add error handling
    return false
 
